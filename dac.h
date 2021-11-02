@@ -5,6 +5,7 @@
 #include "stm32l053xx.h"
 #include <stdint.h>
 
+void init_dac();
 void start_noise();
 void end_noise();
 
