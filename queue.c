@@ -1,5 +1,7 @@
 #include "queue.h"
 
+//Dr. Sean Carroll's Queue Source
+
 void init_queue(queue_t * ptr_to_existing_q, int max_items)
 {
     int16_t * new_buff = (int16_t *const) malloc((max_items+1) * sizeof(int16_t));

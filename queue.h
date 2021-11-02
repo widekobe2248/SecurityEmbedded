@@ -1,6 +1,8 @@
 #ifndef QUEUE_H_
 #define QUEUE_H_
 
+//Dr. Sean Carroll's Queue Header
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdint.h>
