@@ -11,5 +11,6 @@
 //API
 void init_pir(void);
 void alarm_triggered(queue_t *alarmQ);
+bool motion_found(void);
 
 

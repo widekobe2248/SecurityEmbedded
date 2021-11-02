@@ -13,13 +13,19 @@
 //Triggers
 bool pir_trigger(void);
 bool keypad_trigger(void);
-bool alarm_trigger(void);
+bool alarm_trigger(queue_t *alarmQ, int16_t *data);
+void wait(int time);
+void init(void);
+	
+void init(void) {
+	
+	return;
+}
 
 
 //Voids for Main/Overhead
-void wait(int time)
-{
-	for(int i = 0; i < time; i++) { return; }
+void wait(int time) {
+	for(int i = 0; i < time; i++) { } 
 }
 
 
@@ -30,8 +36,13 @@ bool pir_trigger(void) {
 }
 
 //Alarm Tripped Trigger
-bool alarm_trigger(void) { 
-	return true;
+bool alarm_trigger(queue_t *alarmQ, int16_t *data) { 
+	if ( read_q(alarmQ, data) ) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 //Keypad Trigger
@@ -39,12 +50,15 @@ bool keypad_trigger(void) {
 	return true; 
 }
 
-int main(void)
-{
+
+int main(void) {
+	//Msg variables
+	int16_t msg = 0;
 	
 	//Object Declaration
 	queue_t alarmQ;
 	queue_t alarmStatus;
+	queue_t alarmReset;
 	
 	
 	//Array Declaration
@@ -64,15 +78,14 @@ int main(void)
 			//Not a full fsm
 			//But needs to know if it has already been triggered to write to the queue again
 			//Needed to keep alarm on even if the PIR does not detect to keep alarm moving
-			int16_t msg = 0;
 			alarm_triggered(&alarmQ);
-			if( read_q(&alarmQ, &msg) )
-			{
+			
+			//Checks if the queue was written to
+			if( read_q(&alarmQ, &msg) ) {
 				//Writes to the queue to turn alarm on
 				write_q(&alarmStatus, 1);
 			}
 			
-			//Gets Inputs for PIR
 		}
 		
 		
@@ -81,7 +94,7 @@ int main(void)
 			//Gets input for Keypad
 		}
 			
-		if( alarm_trigger() ) {
+		if( alarm_trigger(&alarmStatus, &msg) ) {
 			
 			//Runs the alarm to Run
 		}
