@@ -2,19 +2,18 @@
 
 #include "pir_sensor.h"
 
-void init_pir(void)
-{
-	return;
-}
 
-bool motion_found(void) 
-{
-	//Reads sensor to determine if motion detected and returns the bool
+//Reads sensor to determine if motion detected and returns the bool
+bool motion_found(void) {
+	uint32_t input = (GPIOA->IDR) & (1 << 11);
+	if(input != 0){
+		return true;
+	}
 	return false;
 }
 
-void alarm_triggered(queue_t *alarmQ)
-{
+void alarm_triggered(queue_t *alarmQ) {
+	
 
 	//Returns if motion was detected
 	bool motion_detected = motion_found();
