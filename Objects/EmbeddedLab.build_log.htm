@@ -1,0 +1,100 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.35.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Kobe kobejohnson7771@gmail.com, Trine, LIC=----
+ 
+Tool Versions:
+Toolchain:       MDK-Lite  Version: 5.35.0.2
+Toolchain Path:  C:\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.16
+Assembler:       Armasm.exe V6.16
+Linker/Locator:  ArmLink.exe V6.16
+Library Manager: ArmAr.exe V6.16
+Hex Converter:   FromElf.exe V6.16
+CPU DLL:         SARMCM3.DLL V5.35.0.2
+Dialog DLL:      DARMCM1.DLL V1.19.4.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.9.0
+Dialog DLL:      TARMCM1.DLL V1.14.4.0
+ 
+<h2>Project:</h2>
+C:\Users\kobej\Desktop\EmbeddedProj\SecurityEmbedded\EmbeddedLab.uvprojx
+Project File Date:  11/07/2021
+
+<h2>Output:</h2>
+*** Using Compiler 'V6.16', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
+Rebuild target 'Target 1'
+queue.c(7): warning: implicit conversion changes signedness: 'int' to 'unsigned int' [-Wsign-conversion]
+    int16_t * new_buff = (int16_t *const) malloc((max_items+1) * sizeof(int16_t));
+                                                  ~~~~~~~~~^~  ~
+queue.c(11): warning: implicit conversion loses integer precision: 'int' to 'uint16_t' (aka 'unsigned short') [-Wimplicit-int-conversion]
+    ptr_to_existing_q ->max_index = max_items;
+                                  ~ ^~~~~~~~~
+queue.c(1): warning: In file included from...
+./queue.h(11): warning: padding size of 'queue_t' with 2 bytes to alignment boundary [-Wpadded]
+typedef struct {int16_t * buffer;
+        ^
+3 warnings generated.
+compiling queue.c...
+main.c(8): warning: In file included from...
+./pir_sensor.h(7): warning: In file included from...
+./queue.h(11): warning: padding size of 'queue_t' with 2 bytes to alignment boundary [-Wpadded]
+typedef struct {int16_t * buffer;
+        ^
+1 warning generated.
+compiling main.c...
+pir_sensor.c(3): warning: In file included from...
+./pir_sensor.h(7): warning: In file included from...
+./queue.h(11): warning: padding size of 'queue_t' with 2 bytes to alignment boundary [-Wpadded]
+typedef struct {int16_t * buffer;
+        ^
+1 warning generated.
+compiling pir_sensor.c...
+keypad_sensor.c(3): warning: In file included from...
+./keypad_sensor.h(7): warning: In file included from...
+./queue.h(11): warning: padding size of 'queue_t' with 2 bytes to alignment boundary [-Wpadded]
+typedef struct {int16_t * buffer;
+        ^
+1 warning generated.
+compiling keypad_sensor.c...
+compiling system_stm32l0xx.c...
+assembling startup_stm32l053xx.s...
+linking...
+Program Size: Code=1700 RO-data=224 RW-data=16 ZI-data=1640  
+".\Objects\EmbeddedLab.axf" - 0 Error(s), 6 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.8.0.pack
+                ARM.CMSIS.5.8.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.5.0
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32L0xx_DFP.2.1.0.pack
+                Keil.STM32L0xx_DFP.2.1.0
+                STMicroelectronics STM32L0 Series Device Support, Drivers and Examples
+   * Component: Startup Version: 1.0.0
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_Target_1
+  C:\Users\kobej\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include
+  C:\Users\kobej\AppData\Local\Arm\Packs\Keil\STM32L0xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32L0xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.5.0
+
+   * Component: Keil.Standalone::Device:Startup:1.0.0
+      Include file:  Drivers\CMSIS\Device\ST\STM32L0xx\Include\stm32l0xx.h
+      Source file:   MDK\Device\Source\ARM\STM32L0xx_OPT.s
+      Source file:   Drivers\CMSIS\Device\ST\STM32L0xx\Source\Templates\arm\startup_stm32l053xx.s
+      Source file:   Drivers\CMSIS\Device\ST\STM32L0xx\Source\Templates\system_stm32l0xx.c
+Build Time Elapsed:  00:00:02
+</pre>
+</body>
+</html>

@@ -1,0 +1,10 @@
+--cpu Cortex-M0+
+".\objects\main.o"
+".\objects\pir_sensor.o"
+".\objects\queue.o"
+".\objects\keypad_sensor.o"
+".\objects\startup_stm32l053xx.o"
+".\objects\system_stm32l0xx.o"
+--ro-base 0x08000000 --entry 0x08000000 --rw-base 0x20000000 --entry Reset_Handler --first __Vectors --strict --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\EmbeddedLab.map" -o .\Objects\EmbeddedLab.axf
