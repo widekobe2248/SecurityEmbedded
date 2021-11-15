@@ -8,6 +8,7 @@
 #include "pir_sensor.h"
 #include "keypad_sensor.h"
 #include "queue.h"
+#include "pwm_speaker.h"
 
 
 //Function Init Prototypes
@@ -103,6 +104,7 @@ bool keypad_trigger(void) {
 int main(void) {
 	
 	init();
+	init_timer();
 	
 	//Msg variables (Needed for reading to queues even if I do not care about the message)
 	int16_t msg = 0;
@@ -156,9 +158,11 @@ int main(void) {
 			//If AlarmReset returns true then turn off the alarm
 			if ( read_q(&alarmReset, &msg) ) {
 				//Turn Off Alarm
+				disable_timer();
 			}
 			else {
 			//Turn On Alarm
+				enable_timer();
 			}
 			
 		}
