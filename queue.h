@@ -16,7 +16,7 @@ typedef struct {int16_t * buffer;
 // ACQUIRE BUFFER USING MALLOC AT INITIALIZATION.
 
 //API
-void init_queue(queue_t * ptr_to_existing_q, int max_items);
+void init_queue(queue_t * ptr_to_existing_q, uint16_t max_items);
 bool read_q(queue_t *q0, int16_t *datum);
 bool write_q(queue_t *q0, int16_t datum);
 

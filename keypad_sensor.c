@@ -2,7 +2,10 @@
 
 #include "keypad_sensor.h"
 
-
+//Helper wait function needed to avoid warnings
+void waitFor(int amount) {
+	for(int i = 0; i < amount; i++) { } 
+}
 
 void get_key_input(queue_t *alarmReset) {
 	static bool pressed = false;
@@ -18,7 +21,7 @@ void get_key_input(queue_t *alarmReset) {
 		if( pressed != true ) {
 			if( passwordEntered(input_num) ) {
 				pressed = true;
-				write_q(alarmReset, 1);				
+				write_q(alarmReset, 1);					
 			}
 		}
 	}
@@ -34,6 +37,7 @@ int num_pressed(void) {
 	
 	//Check Row 1
 	GPIOB->BSRR = (GPIO_BSRR_BS_13);
+	waitFor(10);
 	//Check Column 1
 	uint32_t input = (GPIOB->IDR) & (1 << 2);
 	if( input != 0 ) {
@@ -49,6 +53,7 @@ int num_pressed(void) {
 	if( input != 0 ) {
 		return 3;
 	}
+	
 	//Turn off Row One Output
 	GPIOB->BSRR = (GPIO_BSRR_BR_13);
 	
@@ -58,6 +63,7 @@ int num_pressed(void) {
 	
 	//Check Row 2
 	GPIOB->BSRR = (GPIO_BSRR_BS_14);
+	waitFor(10);
 	//Check Column 1
 	input = (GPIOB->IDR) & (1 << 2);
 	if( input != 0 ) {
@@ -87,6 +93,7 @@ int num_pressed(void) {
 	
 	//Check Row 3
 	GPIOB->BSRR = (GPIO_BSRR_BS_15);
+	waitFor(10);
 	//Check Column 1
 	input = (GPIOB->IDR) & (1 << 2);
 	if( input != 0 ) {
@@ -111,14 +118,15 @@ int num_pressed(void) {
 	
 	//Check Row 4
 	GPIOB->BSRR = (GPIO_BSRR_BS_1);
+	waitFor(10);
 	//Check Column 2 because 1 and 3 does not have a number so ignore it
 	input = (GPIOB->IDR) & (1 << 11);
 	if( input != 0 ) {
-		return 8;
+		return 0;
 	}
 	//Turn off Row Four Output
 	GPIOB->BSRR = (GPIO_BSRR_BR_1);
-	
+
 	//If no input just return -1
 	return -1;
 }
@@ -127,36 +135,25 @@ int num_pressed(void) {
 //Checks if the password has been entered and handles recording inputs
 bool passwordEntered(int num_entered) {
 	//Array Declarations
-	const int pinCorrect[4] = {1, 3, 5, 8};
-	static int pinInput[4] = {-1, -1, -1, -1};
-	static int arrPos = 0;
+
+	static int count = 0;
 	
-	//Puts the number detected into the pinInput Array
-	pinInput[arrPos] = num_entered;
-	arrPos++;
-	if( arrPos == 4) {
-		//Resets arrPos
-		arrPos = 0;
-		//Checks if Pin is the same as the set correct pin
-		if(pinCorrect[0] == pinInput[0] && pinCorrect[1] == pinInput[1] && pinCorrect[2] == pinInput[2] && pinCorrect[3] == pinInput[3]) {
-			//Resets the pinInput to the reset state
-			pinInput[0] = -1;
-			pinInput[1] = -1;
-			pinInput[2] = -1;
-			pinInput[3] = -1;
-			//Returns true that the correct pin was entered
+	
+	//Working Code for entering 0 4 times to deactivate the alarm
+	//Got it working Not enough time to make it more variable and work
+	if( num_entered == 0 ) {
+		count = count + 1;
+		if(count == 4)
+		{
+			count = 0;
 			return true;
 		}
-		else {
-			//Reset the pins and return false
-			pinInput[0] = -1;
-			pinInput[1] = -1;
-			pinInput[2] = -1;
-			pinInput[3] = -1;
-			return false;
-		}
+	}
+	else {
+		return false;
 	}
 	
-	//Return False that it has not been entered
 	return false;
+
+
 }

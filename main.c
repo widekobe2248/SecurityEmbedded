@@ -31,7 +31,7 @@ void init(void) {
 	
 	//PA 5 is on board LED set to Output
 	GPIOA->MODER &= ~GPIO_MODER_MODE5_Msk;
-	GPIOA->MODER |= (01 << GPIO_MODER_MODE5_Pos);
+	GPIOA->MODER |= (1 << GPIO_MODER_MODE5_Pos);
 	
 	//PA 11 Is PIR Sensor Input Pin
 	GPIOA->MODER &= ~GPIO_MODER_MODE11_Msk;
@@ -46,25 +46,34 @@ void init(void) {
 	GPIOB->MODER &= ~GPIO_MODER_MODE1_Msk;
 	
 	//Set All Pins
-	GPIOB->MODER |= (01 << GPIO_MODER_MODE13_Pos);
-	GPIOB->MODER |= (01 << GPIO_MODER_MODE14_Pos);
-	GPIOB->MODER |= (01 << GPIO_MODER_MODE15_Pos);
-	GPIOB->MODER |= (01 << GPIO_MODER_MODE1_Pos);
+	GPIOB->MODER |= (1 << GPIO_MODER_MODE13_Pos);
+	GPIOB->MODER |= (1 << GPIO_MODER_MODE14_Pos);
+	GPIOB->MODER |= (1 << GPIO_MODER_MODE15_Pos);
+	GPIOB->MODER |= (1 << GPIO_MODER_MODE1_Pos);
+	
+	GPIOB->BSRR = (GPIO_BSRR_BR_13);
+	GPIOB->BSRR = (GPIO_BSRR_BR_14);
+	GPIOB->BSRR = (GPIO_BSRR_BR_15);
+	GPIOB->BSRR = (GPIO_BSRR_BR_1);
 	
 	
 	//PB 2,11,12 are Input Pins for Reading Buttons
 	//Clear all Pins
-	GPIOB->MODER &= ~GPIO_MODER_MODE13_Msk;
-	GPIOB->MODER &= ~GPIO_MODER_MODE13_Msk;
-	GPIOB->MODER &= ~GPIO_MODER_MODE13_Msk;
+	GPIOB->MODER &= ~GPIO_MODER_MODE2_Msk;
+	GPIOB->MODER &= ~GPIO_MODER_MODE11_Msk;
+	GPIOB->MODER &= ~GPIO_MODER_MODE12_Msk;
 	
 	//Set All Pins
-	GPIOB->MODER |= (00 << GPIO_MODER_MODE13_Pos);
-	GPIOB->MODER |= (00 << GPIO_MODER_MODE13_Pos);
-	GPIOB->MODER |= (00 << GPIO_MODER_MODE13_Pos);
+	GPIOB->MODER |= (0 << GPIO_MODER_MODE2_Pos);
+	GPIOB->MODER |= (0 << GPIO_MODER_MODE11_Pos);
+	GPIOB->MODER |= (0 << GPIO_MODER_MODE12_Pos);
 	
+	//Set them to Pull-Down
+	GPIOB->PUPDR |= (2 << GPIO_PUPDR_PUPD2_Pos);
+	GPIOB->PUPDR |= (2 << GPIO_PUPDR_PUPD11_Pos);
+	GPIOB->PUPDR |= (2 << GPIO_PUPDR_PUPD12_Pos);
 	
-	GPIOA->BSRR = (GPIO_BSRR_BS_5); //Turns on LED
+	GPIOA->BSRR = (GPIO_BSRR_BR_5); //Turns on LED
 	return;
 }
 
@@ -121,7 +130,7 @@ int main(void) {
 
 	//PIR Warm-Up (x Amount of Time)
 	//8s
-	wait(45000);
+	//wait(45000);
 	
 
 	while(1) {
@@ -129,16 +138,18 @@ int main(void) {
 		//Pir Sensor Task
 		if( pir_trigger() ){
 			static bool alarmOn = false;
+			
+			if( read_q(&alarmReset, &msg) ) {
+				alarmOn = false;
+			}
+						
 			alarm_triggered(&alarmQ);
 			
 			//Checks if the queue was written to
-			if( read_q(&alarmQ, &msg) || alarmOn ) {
-				//Writes to the queue to turn alarm on and sets alarmOn to true
+			if( read_q(&alarmQ, &msg) || alarmOn) {
+				//Writes to the queue to turn alarm on
 				alarmOn = true;
 				write_q(&alarmStatus, 1);
-			}
-			else {
-				alarmOn = false;
 			}
 			
 		}
@@ -156,9 +167,12 @@ int main(void) {
 			//If AlarmReset returns true then turn off the alarm
 			if ( read_q(&alarmReset, &msg) ) {
 				//Turn Off Alarm
+				write_q(&alarmReset, 1);
+				GPIOA->BSRR = (GPIO_BSRR_BR_5);
 			}
 			else {
 			//Turn On Alarm
+				GPIOA->BSRR = (GPIO_BSRR_BS_5);
 			}
 			
 		}
