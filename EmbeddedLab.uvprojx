@@ -418,6 +418,16 @@
               <FileType>1</FileType>
               <FilePath>.\keypad_sensor.c</FilePath>
             </File>
+            <File>
+              <FileName>pwm_speaker.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\pwm_speaker.c</FilePath>
+            </File>
+            <File>
+              <FileName>pwm_speaker.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\pwm_speaker.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

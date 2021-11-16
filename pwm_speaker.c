@@ -1,6 +1,21 @@
 //Andrew Bartling
 //Modified version of Sean Carrol's PWM code
+/*   Copyright 2021 Kobe Johnson & Andrew Bartling
 
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+//CRC Entry- This class is in charge of initalizing the timer for PWM
+//And provides interface functions for the schedule in main for turning the timer on and off
 #include "stm32l053xx.h"
 #include <stdint.h>
 #include "pwm_speaker.h"
@@ -29,7 +44,7 @@ void init_timer(void)
 
 void enable_timer(void)
 {
-	TIM2->CR1 |= 1<<TIM_CR1_CEN_Pos;
+	TIM2->CR1 |= 1<< TIM_CR1_CEN_Pos;
 	// This will allow us to enable the timer when the alarm is active
 }
 

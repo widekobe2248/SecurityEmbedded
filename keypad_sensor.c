@@ -1,15 +1,30 @@
 //Kobe Johnson
+/*   Copyright 2021 Kobe Johnson & Andrew Bartling
 
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+//CRC Entry - This class is responsible for reading the input on the keypad through scanning
+//It also writes to queues when a password is entered to reset the alarm
 #include "keypad_sensor.h"
 
 //Helper wait function needed to avoid warnings
-void waitFor(int amount) {
+void waitFor(uint16_t amount) {
 	for(int i = 0; i < amount; i++) { } 
 }
 
 void get_key_input(queue_t *alarmReset) {
 	static bool pressed = false;
-	int input_num = num_pressed();
+	int16_t input_num = num_pressed();
 	
 	
 	if(input_num == -1) {
@@ -33,7 +48,7 @@ void get_key_input(queue_t *alarmReset) {
 
 
 //Gets input for the get_key_input function (Helper function)
-int num_pressed(void) {
+int16_t num_pressed(void) {
 	
 	//Check Row 1
 	GPIOB->BSRR = (GPIO_BSRR_BS_13);
@@ -55,10 +70,8 @@ int num_pressed(void) {
 	}
 	
 	//Turn off Row One Output
+	waitFor(10);
 	GPIOB->BSRR = (GPIO_BSRR_BR_13);
-	
-	
-	
 	
 	
 	//Check Row 2
@@ -80,15 +93,8 @@ int num_pressed(void) {
 		return 6;
 	}
 	//Turn off Row Two Output
+	waitFor(10);
 	GPIOB->BSRR = (GPIO_BSRR_BR_14);
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	//Check Row 3
@@ -110,11 +116,10 @@ int num_pressed(void) {
 		return 9;
 	}
 	//Turn off Row Three Output
+	waitFor(10);
 	GPIOB->BSRR = (GPIO_BSRR_BR_15);
 	
-	
-	
-	
+
 	
 	//Check Row 4
 	GPIOB->BSRR = (GPIO_BSRR_BS_1);
@@ -125,6 +130,7 @@ int num_pressed(void) {
 		return 0;
 	}
 	//Turn off Row Four Output
+	waitFor(10);
 	GPIOB->BSRR = (GPIO_BSRR_BR_1);
 
 	//If no input just return -1
@@ -133,15 +139,13 @@ int num_pressed(void) {
 
 
 //Checks if the password has been entered and handles recording inputs
-bool passwordEntered(int num_entered) {
-	//Array Declarations
-
-	static int count = 0;
+bool passwordEntered(int16_t num_entered) {
+	static uint16_t count = 0;
 	
 	
-	//Working Code for entering 0 4 times to deactivate the alarm
-	//Got it working Not enough time to make it more variable and work
-	if( num_entered == 0 ) {
+	//Working Code for entering fice 4 times to deactivate the alarm
+	//Got it working Not enough time to make it more variable and work (But did try...a lot)
+	if( num_entered == 9 ) {
 		count = count + 1;
 		if(count == 4)
 		{
@@ -153,6 +157,8 @@ bool passwordEntered(int num_entered) {
 		return false;
 	}
 	
+	
+	//Just a last double check to ensure that if it does not do anything return false and ignore it
 	return false;
 
 
